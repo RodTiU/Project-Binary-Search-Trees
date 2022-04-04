@@ -93,6 +93,16 @@ class Tree
     end
   end
 
+  def find(value, root = @root)
+    if root.data == value
+      return root
+    elsif root.data < value
+      find(value, root.right)
+    elsif root.data > value
+      find(value, root.left)
+    end
+  end
+
   def pretty_print(node = @root, prefix = "", is_left = true)
     return p nil if @root.data.nil?
 
@@ -104,4 +114,4 @@ end
 
 array = (1..15).to_a
 tr = Tree.new(array)
-tr.pretty_print
+# tr.pretty_print
