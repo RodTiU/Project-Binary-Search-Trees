@@ -103,6 +103,15 @@ class Tree
     end
   end
 
+  def level_order(root = @root, queue = [], level_array = [])
+    level_array << root.data
+    queue << root.left unless root.left.nil?
+    queue << root.right unless root.right.nil?
+    return level_array if queue.empty?
+
+    level_order(queue.shift, queue, level_array)
+  end
+
   def pretty_print(node = @root, prefix = "", is_left = true)
     return p nil if @root.data.nil?
 
@@ -114,4 +123,5 @@ end
 
 array = (1..15).to_a
 tr = Tree.new(array)
-# tr.pretty_print
+tr.pretty_print
+p tr.level_order
