@@ -112,6 +112,64 @@ class Tree
     level_order(queue.shift, queue, level_array)
   end
 
+  def inorder(root = @root, inorder_array = [])
+    return inorder_array if root.nil?
+
+    inorder(root.left, inorder_array)
+    inorder_array << root.data
+    inorder(root.right, inorder_array)
+  end
+
+  def preorder(root = @root, preorder_array = [])
+    return preorder_array if root.nil?
+
+    preorder_array << root.data
+    preorder(root.left, preorder_array)
+    preorder(root.right, preorder_array)
+  end
+
+  def postorder(root = @root, postorder_array = [])
+    return postorder_array if root.nil?
+
+    postorder(root.left, postorder_array)
+    postorder(root.right, postorder_array)
+    postorder_array << root.data
+  end
+
+  def height(root = @root, depth = [], count = 0)
+    return depth if root.nil?
+
+    # count = 0
+    height(root.left, depth, count + 1)
+    height(root.right, depth, count + 1)
+    depth << count
+    depth = depth.max
+  end
+
+  def depth(node_value, root = @root, count = 0)
+    return 0 if node_value == @root.data
+    return nil if root.nil?
+
+    if node_value > root.data
+      count += 1
+      depth(node_value, root.right, count)
+    elsif node_value < root.data
+      count += 1
+      depth(node_value, root.left, count)
+    else
+      count
+    end
+  end
+
+  def balanced?(root = @root)
+    return false if (height(root.left) - height(root.right)).abs > 1
+    return true if (height(root.left) - height(root.right)).abs <= 1
+  end
+
+  def rebalance
+    @root = build_tree(preorder().sort)
+  end
+
   def pretty_print(node = @root, prefix = "", is_left = true)
     return p nil if @root.data.nil?
 
@@ -120,8 +178,3 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? "    " : "│   "}", true) if node.left
   end
 end
-
-array = (1..15).to_a
-tr = Tree.new(array)
-tr.pretty_print
-p tr.level_order
